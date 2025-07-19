@@ -6,6 +6,9 @@
 
 # Ignore log files
 *.log
+db/
+data/
+cert/
 
 # Ignore temporary files
 tmp/

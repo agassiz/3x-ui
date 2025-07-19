@@ -160,7 +160,29 @@ func (s *XrayService) GetXrayConfig() (*xray.Config, error) {
 		inboundConfig := inbound.GenXrayInboundConfig()
 		xrayConfig.InboundConfigs = append(xrayConfig.InboundConfigs, *inboundConfig)
 	}
+	// 更新xrayTemplateConfig到数据库
+	s.updateXrayTemplateConfig(xrayConfig)
+
 	return xrayConfig, nil
+}
+
+// updateXrayTemplateConfig 更新数据库中的xrayTemplateConfig配置
+// 从实际生成的Xray配置中提取模板，确保配置始终是最新和正确的
+func (s *XrayService) updateXrayTemplateConfig(xrayConfig *xray.Config) {
+	// 将当前配置序列化为JSON作为模板
+	configBytes, err := json.MarshalIndent(xrayConfig, "", "  ")
+	if err != nil {
+		logger.Warning("Failed to marshal xray template config:", err)
+		return
+	}
+
+	// 保存到数据库
+	err = s.settingService.SaveXrayTemplateConfig(string(configBytes))
+	if err != nil {
+		logger.Warning("Failed to save xray template config:", err)
+	} else {
+		logger.Info("Successfully updated xrayTemplateConfig in database")
+	}
 }
 
 func (s *XrayService) GetXrayTraffic() ([]*xray.Traffic, []*xray.ClientTraffic, error) {

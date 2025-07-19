@@ -859,10 +859,12 @@ func (s *InboundService) addClientTraffic(tx *gorm.DB, traffics []*xray.ClientTr
 				dbClientTraffics[dbTraffic_index].Up += traffics[traffic_index].Up
 				dbClientTraffics[dbTraffic_index].Down += traffics[traffic_index].Down
 
-				// Add user in onlineUsers array on traffic
-				if traffics[traffic_index].Up+traffics[traffic_index].Down > 0 {
-					onlineClients = append(onlineClients, traffics[traffic_index].Email)
-				}
+				// 修复在线状态检测逻辑：
+				// 原问题：只检查当前10秒周期的流量增量 > 0，导致暂时无数据传输的连接被误判为离线
+				// 根本原因：Xray API返回的traffics数组包含所有活跃连接的统计，不管当前周期是否有流量
+				// 解决方案：只要客户端出现在Xray统计中，就认为连接是活跃的（在线）
+				// 这是正确的逻辑，因为Xray只会为活跃连接返回统计数据
+				onlineClients = append(onlineClients, traffics[traffic_index].Email)
 				break
 			}
 		}

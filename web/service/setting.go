@@ -203,6 +203,10 @@ func (s *SettingService) getString(key string) (string, error) {
 		if !ok {
 			return "", common.NewErrorf("key <%v> not in defaultValueMap", key)
 		}
+		// 自动创建缺失的配置项
+		if err := s.saveSetting(key, value); err != nil {
+			logger.Warning("Failed to save default setting:", key, err)
+		}
 		return value, nil
 	} else if err != nil {
 		return "", err
@@ -565,6 +569,14 @@ func (s *SettingService) GetDefaultXrayConfig() (any, error) {
 	return jsonData, nil
 }
 
+func (s *SettingService) GetXrayTemplateConfig() (string, error) {
+	return s.getString("xrayTemplateConfig")
+}
+
+func (s *SettingService) SaveXrayTemplateConfig(config string) error {
+	return s.setString("xrayTemplateConfig", config)
+}
+
 func (s *SettingService) GetDefaultSettings(host string) (any, error) {
 	type settingFunc func() (any, error)
 	settings := map[string]settingFunc{
@@ -581,6 +593,7 @@ func (s *SettingService) GetDefaultSettings(host string) (any, error) {
 		"remarkModel":   func() (any, error) { return s.GetRemarkModel() },
 		"datepicker":    func() (any, error) { return s.GetDatepicker() },
 		"ipLimitEnable": func() (any, error) { return s.GetIpLimitEnable() },
+		"webBasePath":   func() (any, error) { return s.GetBasePath() },
 	}
 
 	result := make(map[string]any)
@@ -588,7 +601,27 @@ func (s *SettingService) GetDefaultSettings(host string) (any, error) {
 	for key, fn := range settings {
 		value, err := fn()
 		if err != nil {
-			return "", err
+			logger.Warning("Failed to get setting:", key, err)
+			// 使用默认值而不是返回错误，确保API始终返回完整的数据结构
+			switch key {
+			case "subEnable":
+				result[key] = false
+			case "tgBotEnable":
+				result[key] = false
+			case "ipLimitEnable":
+				result[key] = false
+			case "expireDiff":
+				result[key] = 0
+			case "trafficDiff":
+				result[key] = 0
+			case "pageSize":
+				result[key] = 50
+			case "webBasePath":
+				result[key] = "/"
+			default:
+				result[key] = ""
+			}
+			continue
 		}
 		result[key] = value
 	}
