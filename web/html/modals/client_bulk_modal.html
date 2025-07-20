@@ -39,7 +39,7 @@
                 <a-select-option v-for="key in TLS_FLOW_CONTROL" :value="key">[[ key ]]</a-select-option>
             </a-select>
         </a-form-item>
-        <a-form-item v-if="app.subSettings.enable">
+        <a-form-item v-if="isSubSettingsEnabled">
             <template slot="label">
                 <a-tooltip>
                     <template slot="title">
@@ -51,7 +51,7 @@
             </template>
             <a-input v-model.trim="clientsBulkModal.subId"></a-input>
         </a-form-item>
-        <a-form-item v-if="app.tgBotEnable">
+        <a-form-item v-if="isTgBotEnabled">
             <template slot="label">
                 <a-tooltip>
                     <template slot="title">
@@ -63,7 +63,7 @@
             </template>
             <a-input-number :style="{ width: '50%' }" v-model.number="clientsBulkModal.tgId" min="0"></a-input-number>
         </a-form-item>
-        <a-form-item v-if="app.ipLimitEnable">
+        <a-form-item v-if="isIpLimitEnabled">
             <template slot="label">
                 <a-tooltip>
                     <template slot="title">
@@ -244,6 +244,17 @@
                 this.clientsBulkModal.expiryTime = -86400000 * days;
             },
         },
+        computed: {
+            isSubSettingsEnabled() {
+                return app && app.subSettings && app.subSettings.enable;
+            },
+            isTgBotEnabled() {
+                return app && app.tgBotEnable;
+            },
+            isIpLimitEnabled() {
+                return app && app.ipLimitEnable;
+            }
+        }
     });
 
 </script>

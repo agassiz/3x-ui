@@ -86,6 +86,7 @@ type Server struct {
 	server *controller.ServerController
 	panel  *controller.XUIController
 	api    *controller.APIController
+	clash  *controller.ClashController
 
 	xrayService    service.XrayService
 	settingService service.SettingService
@@ -232,6 +233,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	s.server = controller.NewServerController(g)
 	s.panel = controller.NewXUIController(g)
 	s.api = controller.NewAPIController(g)
+	s.clash = controller.NewClashController(g)
 
 	return engine, nil
 }
