@@ -7,10 +7,10 @@
   </picture>
 </p>
 
-[![](https://img.shields.io/github/v/release/mhsanaei/3x-ui.svg?style=for-the-badge)](https://github.com/MHSanaei/3x-ui/releases)
-[![](https://img.shields.io/github/actions/workflow/status/mhsanaei/3x-ui/release.yml.svg?style=for-the-badge)](https://github.com/MHSanaei/3x-ui/actions)
-[![GO Version](https://img.shields.io/github/go-mod/go-version/mhsanaei/3x-ui.svg?style=for-the-badge)](#)
-[![Downloads](https://img.shields.io/github/downloads/mhsanaei/3x-ui/total.svg?style=for-the-badge)](https://github.com/MHSanaei/3x-ui/releases/latest)
+[![](https://img.shields.io/github/v/release/agassiz/3x-ui.svg?style=for-the-badge)](https://github.com/agassiz/3x-ui/releases)
+[![](https://img.shields.io/github/actions/workflow/status/agassiz/3x-ui/release.yml.svg?style=for-the-badge)](https://github.com/agassiz/3x-ui/actions)
+[![GO Version](https://img.shields.io/github/go-mod/go-version/agassiz/3x-ui.svg?style=for-the-badge)](#)
+[![Downloads](https://img.shields.io/github/downloads/agassiz/3x-ui/total.svg?style=for-the-badge)](https://github.com/agassiz/3x-ui/releases/latest)
 [![License](https://img.shields.io/badge/license-GPL%20V3-blue.svg?longCache=true&style=for-the-badge)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
 **3X-UI** — продвинутая панель управления с открытым исходным кодом на основе веб-интерфейса, разработанная для управления сервером Xray-core. Предоставляет удобный интерфейс для настройки и мониторинга различных VPN и прокси-протоколов.
@@ -23,10 +23,10 @@
 ## Быстрый старт
 
 ```
-bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/agassiz/3x-ui/master/install.sh)
 ```
 
-Полную документацию смотрите в [вики проекта](https://github.com/MHSanaei/3x-ui/wiki).
+Полную документацию смотрите в [вики проекта](https://github.com/agassiz/3x-ui/wiki).
 
 ## Особая благодарность
 
@@ -42,7 +42,7 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 **Если этот проект полезен для вас, вы можете поставить ему**:star2:
 
 <p align="left">
-  <a href="https://buymeacoffee.com/mhsanaei" target="_blank">
+  <a href="https://buymeacoffee.com/agassiz" target="_blank">
     <img src="./media/buymeacoffe.png" alt="Image">
   </a>
 </p>
@@ -53,4 +53,4 @@ bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.
 
 ## Звезды с течением времени
 
-[![Stargazers over time](https://starchart.cc/MHSanaei/3x-ui.svg?variant=adaptive)](https://starchart.cc/MHSanaei/3x-ui) 
+[![Stargazers over time](https://starchart.cc/agassiz/3x-ui.svg?variant=adaptive)](https://starchart.cc/agassiz/3x-ui) 
