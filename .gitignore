@@ -6,6 +6,9 @@
 
 # Ignore log files
 *.log
+db/
+data/
+cert/
 
 # Ignore temporary files
 tmp/
@@ -24,6 +27,7 @@ main
 # Ignore script and executable files
 /release.sh
 /x-ui
+build/
 
 # Ignore OS specific files
 .DS_Store

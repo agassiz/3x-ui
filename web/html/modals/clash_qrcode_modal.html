@@ -1,0 +1,69 @@
+{{define "modals/clashQrcodeModal"}}
+<a-modal id="clash-qrcode-modal" v-model="clashModal.visible" :closable="true" :class="themeSwitcher.currentTheme"
+  width="fit-content" :dialog-style="isMobile ? { top: '18px' } : {}" :footer="null">
+  <template #title>
+    <span>[[ clashModal.title ]]</span>
+  </template>
+  <tr-qr-modal class="qr-modal">
+    <tr-qr-box class="qr-box">
+      <a-tag color="blue" class="qr-tag"><span>Clash订阅</span></a-tag>
+      <tr-qr-bg class="qr-bg">
+        <canvas @click="copy(clashModal.subscriptionUrl)" id="clashQrcode" class="qr-cv"></canvas>
+      </tr-qr-bg>
+    </tr-qr-box>
+  </tr-qr-modal>
+</a-modal>
+
+<script>
+  const clashModal = {
+    title: '',
+    email: '',
+    subscriptionUrl: '',
+    visible: false,
+    show: function (title, email, subscriptionUrl) {
+      this.title = title;
+      this.email = email;
+      this.subscriptionUrl = subscriptionUrl;
+      this.visible = true;
+    },
+    close: function () {
+      this.visible = false;
+    },
+  };
+  const clashModalApp = new Vue({
+    delimiters: ['[[', ']]'],
+    el: '#clash-qrcode-modal',
+    mixins: [MediaQueryMixin],
+    data: {
+      clashModal: clashModal,
+      themeSwitcher
+    },
+    methods: {
+      copy(content) {
+        ClipboardManager
+          .copyText(content)
+          .then(() => {
+            app.$message.success('{{ i18n "copied" }}')
+          })
+      },
+      setQrCode(elementId, content) {
+        new QRious({
+          element: document.querySelector('#' + elementId),
+          size: 400,
+          value: content,
+          background: 'white',
+          backgroundAlpha: 0,
+          foreground: 'black',
+          padding: 2,
+          level: 'L'
+        });
+      }
+    },
+    updated() {
+      if (this.clashModal.visible && this.clashModal.subscriptionUrl) {
+        this.setQrCode("clashQrcode", this.clashModal.subscriptionUrl);
+      }
+    }
+  });
+</script>
+{{end}}
