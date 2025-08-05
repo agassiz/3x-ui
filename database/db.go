@@ -12,6 +12,7 @@ import (
 	"x-ui/config"
 	"x-ui/database/model"
 	"x-ui/util/crypto"
+	"x-ui/util/random"
 	"x-ui/xray"
 
 	"gorm.io/driver/sqlite"
@@ -35,6 +36,7 @@ func initModels() error {
 		&model.InboundClientIps{},
 		&xray.ClientTraffic{},
 		&model.HistoryOfSeeders{},
+		&model.ClashSubscription{},
 	}
 	for _, model := range models {
 		if err := db.AutoMigrate(model); err != nil {
@@ -107,6 +109,90 @@ func runSeeders(isUsersEmpty bool) error {
 	return nil
 }
 
+func initDefaultSettings() error {
+	empty, err := isTableEmpty("settings")
+	if err != nil {
+		log.Printf("Error checking if settings table is empty: %v", err)
+		return err
+	}
+
+	// 只在settings表为空时才初始化默认配置
+	if empty {
+		log.Println("Initializing default settings...")
+
+		// 导入service包来获取默认配置
+		// 注意：这里我们需要避免循环导入，所以直接定义默认配置
+		defaultSettings := map[string]string{
+			"secret":                      random.Seq(32),
+			"webListen":                   "",
+			"webDomain":                   "",
+			"webPort":                     "2053",
+			"webCertFile":                 "",
+			"webKeyFile":                  "",
+			"webBasePath":                 "/",
+			"sessionMaxAge":               "60",
+			"pageSize":                    "50",
+			"expireDiff":                  "0",
+			"trafficDiff":                 "0",
+			"remarkModel":                 "-ieo",
+			"timeLocation":                "Local",
+			"tgBotEnable":                 "false",
+			"tgBotToken":                  "",
+			"tgBotProxy":                  "",
+			"tgBotAPIServer":              "",
+			"tgBotChatId":                 "",
+			"tgRunTime":                   "@daily",
+			"tgBotBackup":                 "false",
+			"tgBotLoginNotify":            "true",
+			"tgCpu":                       "80",
+			"tgLang":                      "en-US",
+			"twoFactorEnable":             "false",
+			"twoFactorToken":              "",
+			"subEnable":                   "false",
+			"subTitle":                    "",
+			"subListen":                   "",
+			"subPort":                     "2096",
+			"subPath":                     "/sub/",
+			"subJsonPath":                 "/json/",
+			"subDomain":                   "",
+			"subCertFile":                 "",
+			"subKeyFile":                  "",
+			"subUpdates":                  "12",
+			"subEncrypt":                  "true",
+			"subShowInfo":                 "true",
+			"subURI":                      "",
+			"subJsonURI":                  "",
+			"subJsonFragment":             "",
+			"subJsonNoises":               "",
+			"subJsonMux":                  "",
+			"subJsonRules":                "",
+			"datepicker":                  "gregorian",
+			"warp":                        "",
+			"externalTrafficInformEnable": "false",
+			"externalTrafficInformURI":    "",
+		}
+
+		// 批量插入默认配置
+		for key, value := range defaultSettings {
+			setting := &model.Setting{
+				Key:   key,
+				Value: value,
+			}
+			if err := db.Create(setting).Error; err != nil {
+				log.Printf("Error creating default setting %s: %v", key, err)
+				return err
+			}
+		}
+
+		// 注意：不再在数据库初始化时设置xrayTemplateConfig
+		// xrayTemplateConfig应该从实际的Xray配置中动态生成和更新
+
+		log.Printf("Successfully initialized %d default settings + xrayTemplateConfig", len(defaultSettings))
+	}
+
+	return nil
+}
+
 func isTableEmpty(tableName string) (bool, error) {
 	var count int64
 	err := db.Table(tableName).Count(&count).Error
@@ -141,10 +227,19 @@ func InitDB(dbPath string) error {
 	}
 
 	isUsersEmpty, err := isTableEmpty("users")
+	if err != nil {
+		log.Printf("Error checking if users table is empty: %v, assuming table is empty", err)
+		isUsersEmpty = true // 假设表为空，继续初始化流程
+	}
 
 	if err := initUser(); err != nil {
 		return err
 	}
+
+	if err := initDefaultSettings(); err != nil {
+		return err
+	}
+
 	return runSeeders(isUsersEmpty)
 }
 
