@@ -255,7 +255,7 @@
                           <a-icon type="export"></a-icon>
                           {{ i18n "pages.inbounds.export" }}
                         </a-menu-item>
-                        <a-menu-item key="subs" v-if="subSettings.enable">
+                        <a-menu-item key="subs" v-if="subSettings && subSettings.enable">
                           <a-icon type="export"></a-icon>
                           {{ i18n "pages.inbounds.export" }} - {{ i18n "pages.settings.subSettings" }}
                         </a-menu-item>
@@ -358,7 +358,7 @@
                               <a-icon type="export"></a-icon>
                               {{ i18n "pages.inbounds.export"}}
                             </a-menu-item>
-                            <a-menu-item key="subs" v-if="subSettings.enable">
+                            <a-menu-item key="subs" v-if="subSettings && subSettings.enable">
                               <a-icon type="export"></a-icon>
                               {{ i18n "pages.inbounds.export"}} - {{ i18n "pages.settings.subSettings" }}
                             </a-menu-item>
@@ -684,6 +684,7 @@
 {{template "component/aThemeSwitch" .}}
 {{template "component/aCustomStatistic" .}}
 {{template "component/aPersianDatepicker" .}}
+{{template "modals/clashQrcodeModal"}}
 {{template "modals/inboundModal"}}
 {{template "modals/promptModal"}}
 {{template "modals/qrcodeModal"}}
@@ -823,6 +824,8 @@
             showAlert: false,
             ipLimitEnable: false,
             pageSize: 50,
+            webBasePath: '/',
+
         },
         methods: {
             loading(spinning = true) {
@@ -861,23 +864,28 @@
                 if (!msg.success) {
                     return;
                 }
-                with(msg.obj){
-                    this.expireDiff = expireDiff * 86400000;
-                    this.trafficDiff = trafficDiff * 1073741824;
-                    this.defaultCert = defaultCert;
-                    this.defaultKey = defaultKey;
-                    this.tgBotEnable = tgBotEnable;
-                    this.subSettings = {
-                        enable : subEnable,
-                        subTitle : subTitle,
-                        subURI: subURI,
-                        subJsonURI: subJsonURI
-                    };
-                    this.pageSize = pageSize;
-                    this.remarkModel = remarkModel;
-                    this.datepicker = datepicker;
-                    this.ipLimitEnable = ipLimitEnable;
-                }
+                console.log('🔍 [Debug] getDefaultSettings response:', msg.obj);
+
+                // 安全地获取配置，避免未定义错误
+                const settings = msg.obj || {};
+                this.expireDiff = (settings.expireDiff || 0) * 86400000;
+                this.trafficDiff = (settings.trafficDiff || 0) * 1073741824;
+                this.defaultCert = settings.defaultCert || '';
+                this.defaultKey = settings.defaultKey || '';
+                this.tgBotEnable = settings.tgBotEnable || false;
+                this.subSettings = {
+                    enable: settings.subEnable || false,
+                    subTitle: settings.subTitle || '',
+                    subURI: settings.subURI || '',
+                    subJsonURI: settings.subJsonURI || ''
+                };
+                this.pageSize = settings.pageSize || 50;
+                this.remarkModel = settings.remarkModel || '-ieo';
+                this.datepicker = settings.datepicker || 'gregorian';
+                this.ipLimitEnable = settings.ipLimitEnable || false;
+                this.webBasePath = settings.webBasePath || '/';
+
+                console.log('🔍 [Debug] webBasePath set to:', this.webBasePath);
             },
             setInbounds(dbInbounds) {
                 this.inbounds.splice(0);
@@ -1622,19 +1630,35 @@
                     return p;
                 }
                 return false
-            }
+            },
+            // Clash订阅相关方法
+            showClashQrcode(email) {
+                console.log('🔍 showClashQrcode 被调用，email:', email);
+
+                // 生成完整的订阅链接URL，使用后台配置的webBasePath
+                const protocol = window.location.protocol;
+                const host = window.location.host;
+                const basePath = this.webBasePath.endsWith('/') ? this.webBasePath.slice(0, -1) : this.webBasePath;
+                const subscriptionUrl = `${protocol}//${host}${basePath}/clash/subscription/${encodeURIComponent(email)}`;
+                console.log('🔍 订阅URL:', subscriptionUrl);
+                console.log('🔍 使用的webBasePath:', this.webBasePath);
+
+                // 调用模态窗口
+                clashModal.show(`Clash订阅 - ${email}`, email, subscriptionUrl);
+            },
+
         },
         watch: {
             searchKey: Utils.debounce(function (newVal) {
                 this.searchInbounds(newVal);
             }, 500)
         },
-        mounted() {
+        async mounted() {
             if (window.location.protocol !== "https:") {
                 this.showAlert = true;
             }
             this.loading();
-            this.getDefaultSettings();
+            await this.getDefaultSettings();
             if (this.isRefreshEnabled) {
                 this.startDataRefreshLoop();
             }

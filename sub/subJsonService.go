@@ -276,13 +276,15 @@ func (s *SubJsonService) realityData(rData map[string]any) map[string]any {
 	rltyData["spiderX"] = "/" + random.Seq(15)
 	shortIds, ok := rData["shortIds"].([]any)
 	if ok && len(shortIds) > 0 {
-		rltyData["shortId"] = shortIds[random.Num(len(shortIds))].(string)
+		// 固定选择第一个shortId，与前端JavaScript保持一致
+		rltyData["shortId"] = shortIds[0].(string)
 	} else {
 		rltyData["shortId"] = ""
 	}
 	serverNames, ok := rData["serverNames"].([]any)
 	if ok && len(serverNames) > 0 {
-		rltyData["serverName"] = serverNames[random.Num(len(serverNames))].(string)
+		// 固定选择第一个serverName，与前端JavaScript保持一致
+		rltyData["serverName"] = serverNames[0].(string)
 	} else {
 		rltyData["serverName"] = ""
 	}

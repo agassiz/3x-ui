@@ -729,8 +729,8 @@ class RealityStreamSettings extends XrayCommonClass {
     constructor(
         show = false,
         xver = 0,
-        target = 'google.com:443',
-        serverNames = 'google.com,www.google.com',
+        dest = 'www.bing.com:443',
+        serverNames = 'www.bing.com',
         privateKey = '',
         minClientVer = '',
         maxClientVer = '',
@@ -742,7 +742,7 @@ class RealityStreamSettings extends XrayCommonClass {
         super();
         this.show = show;
         this.xver = xver;
-        this.target = target;
+        this.target = dest;
         this.serverNames = Array.isArray(serverNames) ? serverNames.join(",") : serverNames;
         this.privateKey = privateKey;
         this.minClientVer = minClientVer;
