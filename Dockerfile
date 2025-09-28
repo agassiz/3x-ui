@@ -15,21 +15,34 @@ COPY . .
 
 ENV CGO_ENABLED=1
 ENV CGO_CFLAGS="-D_LARGEFILE64_SOURCE"
-RUN go build -ldflags "-w -s" -o build/x-ui main.go
+
+# Create build directory and download xray dependencies first
+RUN mkdir -p build
 RUN ./DockerInit.sh "$TARGETARCH"
+
+# Clean only the x-ui binary, preserve bin directory with xray
+RUN rm -f build/x-ui
+
+RUN go build -ldflags "-w -s" -o build/x-ui main.go
 
 # ========================================================
 # Stage: Final Image of 3x-ui
 # ========================================================
 FROM alpine
-ENV TZ=Asia/Tehran
+ENV TZ=Asia/Shanghai
 WORKDIR /app
 
 RUN apk add --no-cache --update \
   ca-certificates \
   tzdata \
   fail2ban \
-  bash
+  bash \
+  python3 \
+  py3-pip
+
+# Create xray log directory for IP limit functionality
+RUN mkdir -p /var/log/xray && \
+    chmod 755 /var/log/xray
 
 COPY --from=builder /app/build/ /app/
 COPY --from=builder /app/DockerEntrypoint.sh /app/
@@ -46,7 +59,8 @@ RUN rm -f /etc/fail2ban/jail.d/alpine-ssh.conf \
 RUN chmod +x \
   /app/DockerEntrypoint.sh \
   /app/x-ui \
-  /usr/bin/x-ui
+  /usr/bin/x-ui \
+  /app/bin/xray-linux-* 2>/dev/null || true
 
 ENV XUI_ENABLE_FAIL2BAN="true"
 EXPOSE 2053

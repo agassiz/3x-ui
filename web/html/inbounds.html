@@ -1,4 +1,146 @@
 {{ template "page/head_start" .}}
+<style>
+  .ant-table:not(.ant-table-expanded-row .ant-table) {
+    outline: 1px solid #f0f0f0;
+    outline-offset: -1px;
+    border-radius: 1rem;
+    overflow-x: hidden;
+  }
+  .dark .ant-table:not(.ant-table-expanded-row .ant-table) {
+    outline-color: var(--dark-color-table-ring);
+  }
+  .ant-table .ant-table-content .ant-table-scroll .ant-table-body {
+    overflow-y: hidden;
+  }
+  .ant-table .ant-table-content .ant-table-tbody tr:last-child .ant-table-wrapper {
+	  margin:-10px 22px !important;
+  }
+  .ant-table .ant-table-content .ant-table-tbody tr:last-child .ant-table-wrapper .ant-table {
+    border-bottom-left-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+  }
+  .ant-table .ant-table-content .ant-table-tbody tr:last-child tr:last-child td {
+	  border-bottom-color: transparent;
+  }
+  .ant-table .ant-table-tbody tr:last-child.ant-table-expanded-row .ant-table-wrapper .ant-table-tbody>tr:last-child>td:first-child {
+    border-bottom-left-radius: 6px;
+  }
+  .ant-table .ant-table-tbody tr:last-child.ant-table-expanded-row .ant-table-wrapper .ant-table-tbody>tr:last-child>td:last-child {
+    border-bottom-right-radius: 6px;
+  }
+  @media (min-width: 769px) {
+    .ant-layout-content {
+      margin: 24px 16px;
+    }
+  }
+  @media (max-width: 768px) {
+    .ant-card-body {
+      padding: .5rem;
+    }
+    .ant-table .ant-table-content .ant-table-tbody tr:last-child .ant-table-wrapper {
+	    margin:-10px 2px !important;
+    }
+  }
+  .dark .ant-switch-small:not(.ant-switch-checked) {
+    background-color: var(--dark-color-surface-100) !important;
+  }
+  .ant-custom-popover-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 5px 0;
+  }
+  .ant-col-sm-24 {
+    margin: 0.5rem -2rem 0.5rem 2rem;
+  }
+  tr.hideExpandIcon .ant-table-row-expand-icon {
+    display: none;
+  }
+  .infinite-tag {
+    padding: 0 5px;
+    border-radius: 2rem;
+    min-width: 50px;
+    min-height: 22px;
+  }
+  .infinite-bar .ant-progress-inner .ant-progress-bg {
+    background-color: #F2EAF1;
+    border: #D5BED2 solid 1px;
+  }
+  .dark .infinite-bar .ant-progress-inner .ant-progress-bg {
+    background-color: #7a316f !important;
+    border: #7a316f solid 1px;
+  }
+  .ant-collapse {
+    margin: 5px 0;
+  }
+  .info-large-tag {
+    max-width: 200px;
+    overflow: hidden;
+  }
+  .client-comment {
+    font-size: 12px;
+    opacity: 0.75;
+    cursor: help;
+  }
+  .client-email {
+    font-weight: 500;
+  }
+  .client-popup-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .online-animation .ant-badge-status-dot {
+    animation: onlineAnimation 1.2s linear infinite;
+  }
+  @keyframes onlineAnimation {
+    0%,
+    50%,
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    10% {
+      transform: scale(1.5);
+      opacity: .2;
+    }
+  }
+  .tr-table-box {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    align-items: center;
+  }
+  .tr-table-rt {
+    flex-basis: 70px;
+    min-width: 70px;
+    text-align: end;
+  }
+  .tr-table-lt {
+    flex-basis: 70px;
+    min-width: 70px;
+    text-align: start;
+  }
+  .tr-table-bar {
+    flex-basis: 160px;
+    min-width: 60px;
+  }
+  .tr-infinity-ch {
+    font-size: 14pt;
+    max-height: 24px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .ant-table-expanded-row .ant-table .ant-table-body {
+    overflow-x: hidden;
+  }
+  .ant-table-expanded-row .ant-table-tbody>tr>td {
+    padding: 10px 2px;
+  }
+  .ant-table-expanded-row .ant-table-thead>tr>th {
+    padding: 12px 2px;
+  }
+</style>
 {{ template "page/head_end" .}}
 
 {{ template "page/body_start" .}}
@@ -611,6 +753,7 @@
 {{template "modals/inboundModal"}}
 {{template "modals/promptModal"}}
 {{template "modals/qrcodeModal"}}
+{{template "modals/clashQrcodeModal"}}
 {{template "modals/textModal"}}
 {{template "modals/inboundInfoModal"}}
 {{template "modals/clientsModal"}}
@@ -708,174 +851,194 @@
     { title: '{{ i18n "pages.inbounds.info" }}', width: 10, align: 'center', scopedSlots: { customRender: 'info' } },
   ];
 
-  const app = new Vue({
-    delimiters: ['[[', ']]'],
-    el: '#app',
-    mixins: [MediaQueryMixin],
-    data: {
-      themeSwitcher,
-      persianDatepicker,
-      loadingStates: {
-        fetched: false,
-        spinning: false
-      },
-      inbounds: [],
-      dbInbounds: [],
-      searchKey: '',
-      enableFilter: false,
-      filterBy: '',
-      searchedInbounds: [],
-      expireDiff: 0,
-      trafficDiff: 0,
-      defaultCert: '',
-      defaultKey: '',
-      clientCount: [],
-      onlineClients: [],
-      lastOnlineMap: {},
-      isRefreshEnabled: localStorage.getItem("isRefreshEnabled") === "true" ? true : false,
-      refreshing: false,
-      refreshInterval: Number(localStorage.getItem("refreshInterval")) || 5000,
-      subSettings: {
-        enable: false,
-        subTitle: '',
-        subURI: '',
-        subJsonURI: '',
-        subJsonEnable: false,
-      },
-      remarkModel: '-ieo',
-      datepicker: 'gregorian',
-      tgBotEnable: false,
-      showAlert: false,
-      ipLimitEnable: false,
-      pageSize: 0,
-    },
-    methods: {
-      loading(spinning = true) {
-        this.loadingStates.spinning = spinning;
-      },
-      async getDBInbounds() {
-        this.refreshing = true;
-        const msg = await HttpUtil.get('/panel/api/inbounds/list');
-        if (!msg.success) {
-          this.refreshing = false;
-          return;
-        }
+    const app = new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#app',
+        mixins: [MediaQueryMixin],
+        data: {
+            themeSwitcher,
+            persianDatepicker,
+            loadingStates: {
+              fetched: false,
+              spinning: false
+            },
+            inbounds: [],
+            dbInbounds: [],
+            searchKey: '',
+            enableFilter: false,
+            filterBy: '',
+            searchedInbounds: [],
+            expireDiff: 0,
+            trafficDiff: 0,
+            defaultCert: '',
+            defaultKey: '',
+            clientCount: [],
+            onlineClients: [],
+            lastOnlineMap: {},
+            isRefreshEnabled: localStorage.getItem("isRefreshEnabled") === "true" ? true : false,
+            refreshing: false,
+            refreshInterval: Number(localStorage.getItem("refreshInterval")) || 5000,
+            subSettings: {
+                enable : false,
+                subTitle : '',
+                subURI : '',
+                subJsonURI : '',
+            },
+            remarkModel: '-ieo',
+            datepicker: 'gregorian',
+            tgBotEnable: false,
+            showAlert: false,
+            ipLimitEnable: false,
+            pageSize: 50,
+            webBasePath: '/',
+        },
+        methods: {
+            loading(spinning = true) {
+                this.loadingStates.spinning = spinning;
+            },
+            async getDBInbounds() {
+                this.refreshing = true;
+                const msg = await HttpUtil.get('/panel/api/inbounds/list');
+                if (!msg.success) {
+                    this.refreshing = false;
+                    return;
+                }
 
-        await this.getLastOnlineMap();
-        await this.getOnlineUsers();
+                await this.getLastOnlineMap();
+                await this.getOnlineUsers();
+                
+                this.setInbounds(msg.obj);
+                setTimeout(() => {
+                    this.refreshing = false;
+                }, 500);
+            },
+            async getOnlineUsers() {
+                const msg = await HttpUtil.post('/panel/api/inbounds/onlines');
+                if (!msg.success) {
+                    return;
+                }
+                this.onlineClients = msg.obj != null ? msg.obj : [];
+            },
+            async getLastOnlineMap() {
+                const msg = await HttpUtil.post('/panel/api/inbounds/lastOnline');
+                if (!msg.success || !msg.obj) return;
+                this.lastOnlineMap = msg.obj || {}
+            },
+            async getDefaultSettings() {
+                const msg = await HttpUtil.post('/panel/setting/defaultSettings');
+                if (!msg.success) {
+                    return;
+                }
+                const defaults = msg.obj || {};
+                const {
+                    expireDiff = 0,
+                    trafficDiff = 0,
+                    defaultCert = '',
+                    defaultKey = '',
+                    tgBotEnable = false,
+                    subEnable = false,
+                    subTitle = '',
+                    subURI = '',
+                    subJsonURI = '',
+                    pageSize = 50,
+                    remarkModel = '-ieo',
+                    datepicker = 'gregorian',
+                    ipLimitEnable = false,
+                    webBasePath = '/',
+                } = defaults;
 
-        this.setInbounds(msg.obj);
-        setTimeout(() => {
-          this.refreshing = false;
-        }, 500);
-      },
-      async getOnlineUsers() {
-        const msg = await HttpUtil.post('/panel/api/inbounds/onlines');
-        if (!msg.success) {
-          return;
-        }
-        this.onlineClients = msg.obj != null ? msg.obj : [];
-      },
-      async getLastOnlineMap() {
-        const msg = await HttpUtil.post('/panel/api/inbounds/lastOnline');
-        if (!msg.success || !msg.obj) return;
-        this.lastOnlineMap = msg.obj || {}
-      },
-      async getDefaultSettings() {
-        const msg = await HttpUtil.post('/panel/setting/defaultSettings');
-        if (!msg.success) {
-          return;
-        }
-        with (msg.obj) {
-          this.expireDiff = expireDiff * 86400000;
-          this.trafficDiff = trafficDiff * 1073741824;
-          this.defaultCert = defaultCert;
-          this.defaultKey = defaultKey;
-          this.tgBotEnable = tgBotEnable;
-          this.subSettings = {
-            enable: subEnable,
-            subTitle: subTitle,
-            subURI: subURI,
-            subJsonURI: subJsonURI,
-            subJsonEnable: subJsonEnable,
-          };
-          this.pageSize = pageSize;
-          this.remarkModel = remarkModel;
-          this.datepicker = datepicker;
-          this.ipLimitEnable = ipLimitEnable;
-        }
-      },
-      setInbounds(dbInbounds) {
-        this.inbounds.splice(0);
-        this.dbInbounds.splice(0);
-        this.clientCount.splice(0);
-        for (const inbound of dbInbounds) {
-          const dbInbound = new DBInbound(inbound);
-          to_inbound = dbInbound.toInbound()
-          this.inbounds.push(to_inbound);
-          this.dbInbounds.push(dbInbound);
-          if ([Protocols.VMESS, Protocols.VLESS, Protocols.TROJAN, Protocols.SHADOWSOCKS].includes(inbound.protocol)) {
-            if (dbInbound.isSS && (!to_inbound.isSSMultiUser)) {
-              continue;
-            }
-            this.clientCount[inbound.id] = this.getClientCounts(inbound, to_inbound);
-          }
-        }
-        if (!this.loadingStates.fetched) {
-          this.loadingStates.fetched = true
-        }
-        if (this.enableFilter) {
-          this.filterInbounds();
-        } else {
-          this.searchInbounds(this.searchKey);
-        }
-      },
-      getClientCounts(dbInbound, inbound) {
-        let clientCount = 0, active = [], deactive = [], depleted = [], expiring = [], online = [], comments = new Map();
-        clients = inbound.clients;
-        clientStats = dbInbound.clientStats
-        now = new Date().getTime()
-        if (clients) {
-          clientCount = clients.length;
-          if (dbInbound.enable) {
-            clients.forEach(client => {
-              if (client.comment) {
-                comments.set(client.email, client.comment)
-              }
-              if (client.enable) {
-                active.push(client.email);
-                if (this.isClientOnline(client.email)) online.push(client.email);
-              } else {
-                deactive.push(client.email);
-              }
-            });
-            clientStats.forEach(stats => {
-              const exhausted = stats.total > 0 && (stats.up + stats.down) >= stats.total;
-              const expired = stats.expiryTime > 0 && stats.expiryTime <= now;
-              if (expired || exhausted) {
-                depleted.push(stats.email);
-              } else {
-                const expiringSoon = (stats.expiryTime > 0 && (stats.expiryTime - now < this.expireDiff)) ||
-                  (stats.total > 0 && (stats.total - (stats.up + stats.down) < this.trafficDiff));
-                if (expiringSoon) expiring.push(stats.email);
-              }
-            });
-          } else {
-            clients.forEach(client => {
-              deactive.push(client.email);
-            });
-          }
-        }
-        return {
-          clients: clientCount,
-          active: active,
-          deactive: deactive,
-          depleted: depleted,
-          expiring: expiring,
-          online: online,
-          comments: comments,
-        };
-      },
+                this.expireDiff = Number(expireDiff) * 86400000;
+                this.trafficDiff = Number(trafficDiff) * 1073741824;
+                this.defaultCert = typeof defaultCert === 'string' ? defaultCert : '';
+                this.defaultKey = typeof defaultKey === 'string' ? defaultKey : '';
+                this.tgBotEnable = Boolean(tgBotEnable);
+                this.subSettings = {
+                    enable: Boolean(subEnable),
+                    subTitle: typeof subTitle === 'string' ? subTitle : '',
+                    subURI: typeof subURI === 'string' ? subURI : '',
+                    subJsonURI: typeof subJsonURI === 'string' ? subJsonURI : '',
+                };
+                this.pageSize = Number(pageSize) || 50;
+                this.remarkModel = typeof remarkModel === 'string' && remarkModel.length ? remarkModel : '-ieo';
+                this.datepicker = typeof datepicker === 'string' && datepicker.length ? datepicker : 'gregorian';
+                this.ipLimitEnable = Boolean(ipLimitEnable);
+                let normalizedBasePath = typeof webBasePath === 'string' && webBasePath.length ? webBasePath : '/';
+                if (!normalizedBasePath.startsWith('/')) {
+                    normalizedBasePath = `/${normalizedBasePath}`;
+                }
+                if (normalizedBasePath.length > 1 && normalizedBasePath.endsWith('/')) {
+                    normalizedBasePath = normalizedBasePath.slice(0, -1);
+                }
+                this.webBasePath = normalizedBasePath;
+            },
+            setInbounds(dbInbounds) {
+                this.inbounds.splice(0);
+                this.dbInbounds.splice(0);
+                this.clientCount.splice(0);
+                for (const inbound of dbInbounds) {
+                    const dbInbound = new DBInbound(inbound);
+                    to_inbound = dbInbound.toInbound()
+                    this.inbounds.push(to_inbound);
+                    this.dbInbounds.push(dbInbound);
+                    if ([Protocols.VMESS, Protocols.VLESS, Protocols.TROJAN, Protocols.SHADOWSOCKS].includes(inbound.protocol)) {
+                        if (dbInbound.isSS && (!to_inbound.isSSMultiUser)) {
+                            continue;
+                        }
+                        this.clientCount[inbound.id] = this.getClientCounts(inbound, to_inbound);
+                    }
+                }
+                if (!this.loadingStates.fetched) {
+                    this.loadingStates.fetched = true
+                }
+                if(this.enableFilter){
+                    this.filterInbounds();
+                } else {
+                    this.searchInbounds(this.searchKey);
+                }
+            },
+            getClientCounts(dbInbound, inbound) {
+                let clientCount = 0, active = [], deactive = [], depleted = [], expiring = [], online = [], comments = new Map();
+                clients = inbound.clients;
+                clientStats = dbInbound.clientStats
+                now = new Date().getTime()
+                if (clients) {
+                    clientCount = clients.length;
+                    if (dbInbound.enable) {
+                        clients.forEach(client => {
+                            if (client.comment) {
+                              comments.set(client.email, client.comment)
+                            }
+                            if (client.enable) {
+                                active.push(client.email);
+                                if (this.isClientOnline(client.email)) online.push(client.email);
+                            } else {
+                                deactive.push(client.email);
+                            }
+                        });
+                        clientStats.forEach(client => {
+                            if (!client.enable) {
+                                depleted.push(client.email);
+                            } else {
+                                if ((client.expiryTime > 0 && (client.expiryTime - now < this.expireDiff)) ||
+                                    (client.total > 0 && (client.total - (client.up + client.down) < this.trafficDiff))) expiring.push(client.email);
+                            }
+                        });
+                    } else {
+                        clients.forEach(client => {
+                            deactive.push(client.email);
+                        });
+                    }
+                }
+                return {
+                    clients: clientCount,
+                    active: active,
+                    deactive: deactive,
+                    depleted: depleted,
+                    expiring: expiring,
+                    online: online,
+                    comments: comments,
+                };
+            },
 
       searchInbounds(key) {
         if (ObjectUtil.isEmpty(key)) {
@@ -1096,17 +1259,17 @@
           trafficReset: dbInbound.trafficReset,
           lastTrafficResetTime: dbInbound.lastTrafficResetTime,
 
-          listen: inbound.listen,
-          port: inbound.port,
-          protocol: inbound.protocol,
-          settings: inbound.settings.toString(),
-        };
-        if (inbound.canEnableStream()) {
-          data.streamSettings = inbound.stream.toString();
-        } else if (inbound.stream?.sockopt) {
-          data.streamSettings = JSON.stringify({ sockopt: inbound.stream.sockopt.toJson() }, null, 2);
-        }
-        data.sniffing = inbound.sniffing.toString();
+                    listen: inbound.listen,
+                    port: inbound.port,
+                    protocol: inbound.protocol,
+                    settings: inbound.settings.toString(),
+                };
+                if (inbound.canEnableStream()){
+                  data.streamSettings = inbound.stream.toString();
+                } else if (inbound.stream?.sockopt) {
+                  data.streamSettings = JSON.stringify({ sockopt: inbound.stream.sockopt.toJson() }, null, 2);
+                }
+                data.sniffing = inbound.sniffing.toString();
 
         await this.submit(`/panel/api/inbounds/update/${dbInbound.id}`, data, inModal);
       },
@@ -1561,63 +1724,81 @@
           // Add option to see all in one page
           sizeOptions.push(i.toString());
 
-          p = {
-            showSizeChanger: true,
-            size: 'small',
-            position: 'bottom',
-            pageSize: this.pageSize,
-            pageSizeOptions: sizeOptions
-          };
-          return p;
-        }
-        return false
-      }
-    },
-    watch: {
-      searchKey: Utils.debounce(function (newVal) {
-        this.searchInbounds(newVal);
-      }, 500)
-    },
-    mounted() {
-      if (window.location.protocol !== "https:") {
-        this.showAlert = true;
-      }
-      this.loading();
-      this.getDefaultSettings();
-      if (this.isRefreshEnabled) {
-        this.startDataRefreshLoop();
-      }
-      else {
-        this.getDBInbounds();
-      }
-      this.loading(false);
-    },
-    computed: {
-      total() {
-        let down = 0, up = 0, allTime = 0;
-        let clients = 0, deactive = [], depleted = [], expiring = [];
-        this.dbInbounds.forEach(dbInbound => {
-          down += dbInbound.down;
-          up += dbInbound.up;
-          allTime += (dbInbound.allTime || (dbInbound.up + dbInbound.down));
-          if (this.clientCount[dbInbound.id]) {
-            clients += this.clientCount[dbInbound.id].clients;
-            deactive = deactive.concat(this.clientCount[dbInbound.id].deactive);
-            depleted = depleted.concat(this.clientCount[dbInbound.id].depleted);
-            expiring = expiring.concat(this.clientCount[dbInbound.id].expiring);
-          }
-        });
-        return {
-          down: down,
-          up: up,
-          allTime: allTime,
-          clients: clients,
-          deactive: deactive,
-          depleted: depleted,
-          expiring: expiring,
-        };
-      }
-    },
-  });
+                    p = {
+                        showSizeChanger: true,
+                        size: 'small',
+                        position: 'bottom',
+                        pageSize: this.pageSize,
+                        pageSizeOptions: sizeOptions
+                    };
+                    return p;
+                }
+                return false
+            },
+            // Clash订阅相关方法
+            showClashQrcode(email) {
+                if (!email) {
+                    return;
+                }
+                const protocol = window.location.protocol;
+                const host = window.location.host;
+                let basePath = this.webBasePath || '/';
+                if (!basePath.startsWith('/')) {
+                    basePath = `/${basePath}`;
+                }
+                if (basePath.length > 1 && basePath.endsWith('/')) {
+                    basePath = basePath.slice(0, -1);
+                }
+                const subscriptionUrl = `${protocol}//${host}${basePath}/clash/subscription/${encodeURIComponent(email)}`;
+                clashModal.show(`Clash订阅 - ${email}`, email, subscriptionUrl);
+            },
+
+        },
+        watch: {
+            searchKey: Utils.debounce(function (newVal) {
+                this.searchInbounds(newVal);
+            }, 500)
+        },
+        async mounted() {
+            if (window.location.protocol !== "https:") {
+                this.showAlert = true;
+            }
+            this.loading();
+            await this.getDefaultSettings();
+            if (this.isRefreshEnabled) {
+                this.startDataRefreshLoop();
+            }
+            else {
+                this.getDBInbounds();
+            }
+            this.loading(false);
+        },
+        computed: {
+            total() {
+                let down = 0, up = 0, allTime = 0;
+                let clients = 0, deactive = [], depleted = [], expiring = [];
+                this.dbInbounds.forEach(dbInbound => {
+                    down += dbInbound.down;
+                    up += dbInbound.up;
+                    allTime += (dbInbound.allTime || (dbInbound.up + dbInbound.down));
+                    if (this.clientCount[dbInbound.id]) {
+                        clients += this.clientCount[dbInbound.id].clients;
+                        deactive = deactive.concat(this.clientCount[dbInbound.id].deactive);
+                        depleted = depleted.concat(this.clientCount[dbInbound.id].depleted);
+                        expiring = expiring.concat(this.clientCount[dbInbound.id].expiring);
+                    }
+                });
+                return {
+                    down: down,
+                    up: up,
+                    allTime: allTime,
+                    clients: clients,
+                    deactive: deactive,
+                    depleted: depleted,
+                    expiring: expiring,
+                };
+            }
+        },
+    });
 </script>
 {{ template "page/body_end" .}}

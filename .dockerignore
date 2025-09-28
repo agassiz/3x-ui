@@ -1,0 +1,83 @@
+# Git相关
+.git
+.gitignore
+.gitattributes
+
+# Docker相关
+Dockerfile*
+docker-compose*.yml
+.dockerignore
+
+# 构建产物
+build/
+dist/
+*.exe
+x-ui
+x-ui.exe
+
+# 开发工具
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 日志文件
+*.log
+logs/
+
+# 临时文件
+tmp/
+temp/
+.tmp/
+
+# 数据库文件
+*.db
+*.sqlite
+*.sqlite3
+db/
+
+# 证书文件
+cert/
+*.pem
+*.key
+*.crt
+
+# 环境配置
+.env
+.env.local
+.env.*.local
+
+# 依赖缓存（这些会在Docker内重新下载）
+node_modules/
+vendor/
+
+# 文档
+README*.md
+CHANGELOG*.md
+LICENSE*
+docs/
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+.travis.yml
+
+# 测试相关
+coverage.out
+*.test
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Linux
+*~
+
+# 备份文件
+*.bak
+*.backup
+*.old

@@ -10,14 +10,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v2/database"
-	"github.com/mhsanaei/3x-ui/v2/database/model"
-	"github.com/mhsanaei/3x-ui/v2/logger"
-	"github.com/mhsanaei/3x-ui/v2/util/common"
-	"github.com/mhsanaei/3x-ui/v2/util/random"
-	"github.com/mhsanaei/3x-ui/v2/util/reflect_util"
-	"github.com/mhsanaei/3x-ui/v2/web/entity"
-	"github.com/mhsanaei/3x-ui/v2/xray"
+	"github.com/agassiz/3x-ui/v2/database"
+	"github.com/agassiz/3x-ui/v2/database/model"
+	"github.com/agassiz/3x-ui/v2/logger"
+	"github.com/agassiz/3x-ui/v2/util/common"
+	"github.com/agassiz/3x-ui/v2/util/random"
+	"github.com/agassiz/3x-ui/v2/util/reflect_util"
+	"github.com/agassiz/3x-ui/v2/web/entity"
+	"github.com/agassiz/3x-ui/v2/xray"
 )
 
 //go:embed config.json
@@ -691,6 +691,7 @@ func (s *SettingService) GetDefaultSettings(host string) (any, error) {
 		"remarkModel":   func() (any, error) { return s.GetRemarkModel() },
 		"datepicker":    func() (any, error) { return s.GetDatepicker() },
 		"ipLimitEnable": func() (any, error) { return s.GetIpLimitEnable() },
+		"webBasePath":   func() (any, error) { return s.GetBasePath() },
 	}
 
 	result := make(map[string]any)
@@ -698,7 +699,27 @@ func (s *SettingService) GetDefaultSettings(host string) (any, error) {
 	for key, fn := range settings {
 		value, err := fn()
 		if err != nil {
-			return "", err
+			logger.Warning("Failed to get setting:", key, err)
+			// 使用默认值而不是返回错误，确保API始终返回完整的数据结构
+			switch key {
+			case "subEnable":
+				result[key] = false
+			case "tgBotEnable":
+				result[key] = false
+			case "ipLimitEnable":
+				result[key] = false
+			case "expireDiff":
+				result[key] = 0
+			case "trafficDiff":
+				result[key] = 0
+			case "pageSize":
+				result[key] = 50
+			case "webBasePath":
+				result[key] = "/"
+			default:
+				result[key] = ""
+			}
+			continue
 		}
 		result[key] = value
 	}

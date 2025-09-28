@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/mhsanaei/3x-ui/v2/database/model"
-	"github.com/mhsanaei/3x-ui/v2/logger"
-	"github.com/mhsanaei/3x-ui/v2/util/json_util"
-	"github.com/mhsanaei/3x-ui/v2/util/random"
-	"github.com/mhsanaei/3x-ui/v2/web/service"
-	"github.com/mhsanaei/3x-ui/v2/xray"
+	"github.com/agassiz/3x-ui/v2/database/model"
+	"github.com/agassiz/3x-ui/v2/logger"
+	"github.com/agassiz/3x-ui/v2/util/common"
+	"github.com/agassiz/3x-ui/v2/util/json_util"
+	"github.com/agassiz/3x-ui/v2/util/random"
+	"github.com/agassiz/3x-ui/v2/web/service"
+	"github.com/agassiz/3x-ui/v2/xray"
 )
 
 //go:embed default.json
@@ -273,15 +274,19 @@ func (s *SubJsonService) realityData(rData map[string]any) map[string]any {
 
 	// Set random data
 	rltyData["spiderX"] = "/" + random.Seq(15)
-	shortIds, ok := rData["shortIds"].([]any)
-	if ok && len(shortIds) > 0 {
-		rltyData["shortId"] = shortIds[random.Num(len(shortIds))].(string)
+	if shortIds, ok := rData["shortIds"].([]any); ok {
+		if sid, ok := common.FirstRealityShortIDFromAny(shortIds); ok {
+			rltyData["shortId"] = sid
+		} else {
+			rltyData["shortId"] = ""
+		}
 	} else {
 		rltyData["shortId"] = ""
 	}
 	serverNames, ok := rData["serverNames"].([]any)
 	if ok && len(serverNames) > 0 {
-		rltyData["serverName"] = serverNames[random.Num(len(serverNames))].(string)
+		// 固定选择第一个serverName，与前端JavaScript保持一致
+		rltyData["serverName"] = serverNames[0].(string)
 	} else {
 		rltyData["serverName"] = ""
 	}

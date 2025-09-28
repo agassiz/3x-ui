@@ -4,8 +4,8 @@ package model
 import (
 	"fmt"
 
-	"github.com/mhsanaei/3x-ui/v2/util/json_util"
-	"github.com/mhsanaei/3x-ui/v2/xray"
+	"github.com/agassiz/3x-ui/v2/util/json_util"
+	"github.com/agassiz/3x-ui/v2/xray"
 )
 
 // Protocol represents the protocol type for Xray inbounds.
@@ -77,7 +77,15 @@ type HistoryOfSeeders struct {
 	SeederName string `json:"seederName"`
 }
 
-// GenXrayInboundConfig generates an Xray inbound configuration from the Inbound model.
+type ClashSubscription struct {
+	Id          int    `json:"id" gorm:"primaryKey;autoIncrement"`
+	Email       string `json:"email" gorm:"unique;not null"`
+	UrlMd5      string `json:"urlMd5" gorm:"not null"`
+	YamlContent string `json:"yamlContent" gorm:"type:text"`
+	CreatedAt   int64  `json:"createdAt"`
+	UpdatedAt   int64  `json:"updatedAt"`
+}
+
 func (i *Inbound) GenXrayInboundConfig() *xray.InboundConfig {
 	listen := i.Listen
 	if listen != "" {

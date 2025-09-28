@@ -113,10 +113,44 @@ class RandomUtil {
         return Array.from(randomValues, v => seq[v % seqLength]).join('');
     }
 
-    static randomShortIds() {
-        const lengths = [2, 4, 6, 8, 10, 12, 14, 16].sort(() => Math.random() - 0.5);
+    static generateRealityShortIdList() {
+        const lengths = [8, 10, 12, 14, 16].sort(() => Math.random() - 0.5);
+        return lengths.map(len => this.randomSeq(len, { type: "hex" }));
+    }
 
-        return lengths.map(len => this.randomSeq(len, { type: "hex" })).join(',');
+    static randomShortIds() {
+        return this.generateRealityShortIdList().join(',');
+    }
+
+    static sanitizeRealityShortIds(value) {
+        const normalizeToArray = () => {
+            if (Array.isArray(value)) {
+                return value;
+            }
+            if (typeof value === 'string') {
+                return value.split(',');
+            }
+            return [];
+        };
+
+        const result = [];
+        normalizeToArray().forEach(rawId => {
+            const id = String(rawId || '').trim();
+            if (!id) {
+                return;
+            }
+            if (id.length < 8 || id.length > 16 || id.length % 2 !== 0) {
+                return;
+            }
+            if (!/^[0-9a-fA-F]+$/.test(id)) {
+                return;
+            }
+            const normalized = id.toLowerCase();
+            if (!result.includes(normalized)) {
+                result.push(normalized);
+            }
+        });
+        return result;
     }
 
     static randomLowerAndNum(len) {
