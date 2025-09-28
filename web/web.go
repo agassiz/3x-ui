@@ -16,15 +16,15 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v2/config"
-	"github.com/mhsanaei/3x-ui/v2/logger"
-	"github.com/mhsanaei/3x-ui/v2/util/common"
-	"github.com/mhsanaei/3x-ui/v2/web/controller"
-	"github.com/mhsanaei/3x-ui/v2/web/job"
-	"github.com/mhsanaei/3x-ui/v2/web/locale"
-	"github.com/mhsanaei/3x-ui/v2/web/middleware"
-	"github.com/mhsanaei/3x-ui/v2/web/network"
-	"github.com/mhsanaei/3x-ui/v2/web/service"
+	"github.com/agassiz/3x-ui/v2/config"
+	"github.com/agassiz/3x-ui/v2/logger"
+	"github.com/agassiz/3x-ui/v2/util/common"
+	"github.com/agassiz/3x-ui/v2/web/controller"
+	"github.com/agassiz/3x-ui/v2/web/job"
+	"github.com/agassiz/3x-ui/v2/web/locale"
+	"github.com/agassiz/3x-ui/v2/web/middleware"
+	"github.com/agassiz/3x-ui/v2/web/network"
+	"github.com/agassiz/3x-ui/v2/web/service"
 
 	"github.com/gin-contrib/gzip"
 	"github.com/gin-contrib/sessions"
@@ -98,6 +98,7 @@ type Server struct {
 	index *controller.IndexController
 	panel *controller.XUIController
 	api   *controller.APIController
+	clash *controller.ClashController
 
 	xrayService    service.XrayService
 	settingService service.SettingService
@@ -265,6 +266,7 @@ func (s *Server) initRouter() (*gin.Engine, error) {
 	s.index = controller.NewIndexController(g)
 	s.panel = controller.NewXUIController(g)
 	s.api = controller.NewAPIController(g)
+	s.clash = controller.NewClashController(g)
 
 	// Chrome DevTools endpoint for debugging web apps
 	engine.GET("/.well-known/appspecific/com.chrome.devtools.json", func(c *gin.Context) {

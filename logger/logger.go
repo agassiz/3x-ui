@@ -9,7 +9,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v2/config"
+	"github.com/agassiz/3x-ui/v2/config"
 	"github.com/op/go-logging"
 )
 

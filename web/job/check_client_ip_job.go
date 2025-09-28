@@ -12,10 +12,10 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v2/database"
-	"github.com/mhsanaei/3x-ui/v2/database/model"
-	"github.com/mhsanaei/3x-ui/v2/logger"
-	"github.com/mhsanaei/3x-ui/v2/xray"
+	"github.com/agassiz/3x-ui/v2/database"
+	"github.com/agassiz/3x-ui/v2/database/model"
+	"github.com/agassiz/3x-ui/v2/logger"
+	"github.com/agassiz/3x-ui/v2/xray"
 )
 
 // CheckClientIpJob monitors client IP addresses from access logs and manages IP blocking based on configured limits.
