@@ -5,6 +5,10 @@
     <a-icon :style="{ fontSize: '22px', marginInlineStart: '14px' }" class="normal-icon" type="qrcode" v-if="record.hasLink()" @click="showQrcode(record.id,client);"></a-icon>
   </a-tooltip>
   <a-tooltip>
+    <template slot="title">Clash订阅</template>
+    <a-icon :style="{ fontSize: '24px' }" class="normal-icon" type="cloud" v-if="record.hasLink() && client.email" @click="showClashQrcode(client.email);"></a-icon>
+  </a-tooltip>
+  <a-tooltip>
     <template slot="title">{{ i18n "pages.client.edit" }}</template>
     <a-icon :style="{ fontSize: '22px' }" class="normal-icon" type="edit" @click="openEditClient(record.id,client);"></a-icon>
   </a-tooltip>
@@ -30,7 +34,7 @@
   </a-tooltip>
 </template>
 <template slot="enable" slot-scope="text, client, index">
-  <a-switch v-model="client.enable" @change="switchEnableClient(record.id,client)"></a-switch>
+  <a-switch v-if="client" v-model="client.enable" @change="switchEnableClient(record.id,client)"></a-switch>
 </template>
 <template slot="online" slot-scope="text, client, index">
   <a-popover :overlay-class-name="themeSwitcher.currentTheme">
@@ -156,13 +160,17 @@
     </a-tag>
   </template>
 </template>
-<template slot="actionMenu" slot-scope="text, client, index">
+<template slot="actionMenu" slot-scope="text, client">
   <a-dropdown :trigger="['click']">
     <a-icon @click="e => e.preventDefault()" type="ellipsis" :style="{ fontSize: '20px' }"></a-icon>
     <a-menu slot="overlay" :theme="themeSwitcher.currentTheme">
       <a-menu-item v-if="record.hasLink()" @click="showQrcode(record.id,client);">
         <a-icon :style="{ fontSize: '14px' }" type="qrcode"></a-icon>
         {{ i18n "qrCode" }}
+      </a-menu-item>
+      <a-menu-item v-if="record.hasLink()" @click="showClashQrcode(client.email);">
+        <a-icon :style="{ fontSize: '14px' }" type="cloud"></a-icon>
+        Clash订阅
       </a-menu-item>
       <a-menu-item @click="openEditClient(record.id,client);">
         <a-icon :style="{ fontSize: '14px' }" type="edit"></a-icon>

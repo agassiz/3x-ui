@@ -1,4 +1,4 @@
-module github.com/mhsanaei/3x-ui/v2
+module github.com/agassiz/3x-ui/v2
 
 go 1.25.1
 

@@ -1,0 +1,25 @@
+services:
+  3xui:
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+      args:
+        TARGETARCH: arm64
+    image: 3x-ui:dev  # 明确指定镜像名称，与docker-build-fast.sh保持一致
+    container_name: 3xui_app_dev
+    # hostname: yourhostname <- optional
+    volumes:
+      # Debug模式下挂载web目录，实现HTML文件热重载
+      - ./web/:/app/web/
+      - $PWD/db/:/etc/x-ui/
+      - $PWD/cert/:/root/cert/
+    environment:
+      XRAY_VMESS_AEAD_FORCED: "false"
+      XUI_ENABLE_FAIL2BAN: "true"
+      XUI_DEBUG: "true"  # 启用Debug模式，从文件系统读取HTML文件
+    tty: true
+    # 使用特定端口而不是host模式，方便开发调试
+    ports:
+      - "54321:2053"  # 面板端口
+      - "443:443"      # HTTPS端口
+    restart: unless-stopped

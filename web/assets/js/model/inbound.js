@@ -729,8 +729,8 @@ class RealityStreamSettings extends XrayCommonClass {
     constructor(
         show = false,
         xver = 0,
-        target = 'google.com:443',
-        serverNames = 'google.com,www.google.com',
+        dest = 'www.bing.com:443',
+        serverNames = 'www.bing.com',
         privateKey = '',
         minClientVer = '',
         maxClientVer = '',
@@ -742,13 +742,18 @@ class RealityStreamSettings extends XrayCommonClass {
         super();
         this.show = show;
         this.xver = xver;
-        this.target = target;
-        this.serverNames = Array.isArray(serverNames) ? serverNames.join(",") : serverNames;
+        this.target = dest;
+        const serverNamesList = Array.isArray(serverNames) ? serverNames : String(serverNames || '').split(',');
+        this.serverNames = serverNamesList
+            .map(name => String(name || '').trim())
+            .filter(name => name.length > 0)
+            .join(',');
         this.privateKey = privateKey;
         this.minClientVer = minClientVer;
         this.maxClientVer = maxClientVer;
         this.maxTimediff = maxTimediff;
-        this.shortIds = Array.isArray(shortIds) ? shortIds.join(",") : shortIds;
+        const sanitizedShortIds = RandomUtil.sanitizeRealityShortIds(shortIds);
+        this.shortIds = sanitizedShortIds.length ? sanitizedShortIds.join(',') : RandomUtil.randomShortIds();
         this.mldsa65Seed = mldsa65Seed;
         this.settings = settings;
     }
@@ -764,6 +769,7 @@ class RealityStreamSettings extends XrayCommonClass {
                 json.settings.mldsa65Verify,
             );
         }
+        const sanitizedShortIds = RandomUtil.sanitizeRealityShortIds(json.shortIds);
         return new RealityStreamSettings(
             json.show,
             json.xver,
@@ -773,23 +779,29 @@ class RealityStreamSettings extends XrayCommonClass {
             json.minClientVer,
             json.maxClientVer,
             json.maxTimediff,
-            json.shortIds,
+            sanitizedShortIds,
             json.mldsa65Seed,
             settings,
         );
     }
 
     toJson() {
+        const sanitizedServerNames = this.serverNames
+            .split(',')
+            .map(name => name.trim())
+            .filter(name => name.length > 0);
+        const sanitizedShortIds = RandomUtil.sanitizeRealityShortIds(this.shortIds);
+        const shortIdsArray = sanitizedShortIds.length ? sanitizedShortIds : RandomUtil.generateRealityShortIdList();
         return {
             show: this.show,
             xver: this.xver,
             target: this.target,
-            serverNames: this.serverNames.split(","),
+            serverNames: sanitizedServerNames,
             privateKey: this.privateKey,
             minClientVer: this.minClientVer,
             maxClientVer: this.maxClientVer,
             maxTimediff: this.maxTimediff,
-            shortIds: this.shortIds.split(","),
+            shortIds: shortIdsArray,
             mldsa65Seed: this.mldsa65Seed,
             settings: this.settings,
         };
