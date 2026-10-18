@@ -166,6 +166,29 @@ func TestBuildProxy_VLESSRealityFieldsForClash(t *testing.T) {
 	}
 }
 
+// A client-only fingerprint name such as Shadowrocket's "chrome140" is valid in
+// the share link but unknown to mihomo, so Clash must fall back to chrome.
+func TestBuildProxy_RealityCustomFingerprintFallsBackForClash(t *testing.T) {
+	svc := &SubClashService{SubService: &SubService{}}
+	inbound := &model.Inbound{Listen: "203.0.113.1", Port: 443, Protocol: model.VLESS, Remark: "r", Settings: `{"encryption":"none"}`}
+	client := model.Client{ID: "11111111-2222-4333-8444-555555555555"}
+	for fingerprint, want := range map[string]string{"chrome140": "chrome", "safari26_3": "chrome", "firefox": "firefox", "randomized": "randomized"} {
+		stream := map[string]any{
+			"network":         "tcp",
+			"security":        "reality",
+			"tcpSettings":     map[string]any{"header": map[string]any{"type": "none"}},
+			"realitySettings": map[string]any{"serverName": "reality.example.com", "publicKey": "PBKvalue", "shortId": "ab12", "fingerprint": fingerprint},
+		}
+		proxy := svc.buildProxy(svc.SubService, inbound, client, stream, nil)
+		if proxy == nil {
+			t.Fatalf("%s: buildProxy returned nil", fingerprint)
+		}
+		if proxy["client-fingerprint"] != want {
+			t.Fatalf("fingerprint %q: client-fingerprint = %v, want %s", fingerprint, proxy["client-fingerprint"], want)
+		}
+	}
+}
+
 func TestClashRealityMLKEMAcrossSources(t *testing.T) {
 	svc := NewSubClashService(false, "", &SubService{})
 	for _, security := range []string{"reality", "tls", "none"} {

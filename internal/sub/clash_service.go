@@ -402,6 +402,13 @@ func (s *SubClashService) getProxies(subReq *SubService, inbound *model.Inbound,
 	return proxies
 }
 
+// Reality's uTLS field also takes client-only names (e.g. Shadowrocket's
+// "chrome140"); mihomo rejects those, so Clash only forwards the standard set.
+var standardUTLSFingerprints = map[string]bool{
+	"chrome": true, "firefox": true, "safari": true, "ios": true, "android": true, "edge": true,
+	"360": true, "qq": true, "random": true, "randomized": true, "randomizednoalpn": true, "unsafe": true,
+}
+
 func (s *SubClashService) buildProxy(subReq *SubService, inbound *model.Inbound, client model.Client, stream map[string]any, ep map[string]any) map[string]any {
 	// Hysteria has its own transport + TLS model, applyTransport /
 	// applySecurity don't fit.
@@ -1196,7 +1203,7 @@ func (s *SubClashService) applySecurity(proxy map[string]any, security string, s
 			proxy["reality-opts"] = realityOpts
 		}
 		proxy["client-fingerprint"] = "chrome"
-		if fingerprint, ok := realitySettings["fingerprint"].(string); ok && fingerprint != "" {
+		if fingerprint, ok := realitySettings["fingerprint"].(string); ok && standardUTLSFingerprints[fingerprint] {
 			proxy["client-fingerprint"] = fingerprint
 		}
 		return true

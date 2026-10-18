@@ -1,13 +1,11 @@
 import { z } from 'zod';
 
-import { UtlsFingerprintSchema } from '@/schemas/protocols/security/tls';
-
 // Reality client-side handshake config (sits under the inbound's
 // realitySettings.settings on the wire — the panel's class names the field
 // `settings` even though it's the "client" half of Reality).
 export const RealityClientSettingsSchema = z.object({
   publicKey: z.string().default(''),
-  fingerprint: UtlsFingerprintSchema.default('chrome'),
+  fingerprint: z.string().min(1).default('chrome'),
   serverName: z.string().default(''),
   spiderX: z.string().default('/'),
   mldsa65Verify: z.string().default(''),

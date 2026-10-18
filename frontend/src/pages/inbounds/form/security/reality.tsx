@@ -3,6 +3,7 @@ import { useFormContext, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import {
   Alert,
+  AutoComplete,
   Button,
   Collapse,
   Descriptions,
@@ -110,7 +111,7 @@ export default function RealityForm({
         name={['streamSettings', 'realitySettings', 'settings', 'fingerprint']}
         label="uTLS"
       >
-        <Select options={Object.values(UTLS_FINGERPRINT).map((fp) => ({ value: fp, label: fp }))} />
+        <AutoComplete options={Object.values(UTLS_FINGERPRINT).map((fp) => ({ value: fp }))} />
       </FormField>
       <Form.Item
         label={t('pages.inbounds.form.target')}
