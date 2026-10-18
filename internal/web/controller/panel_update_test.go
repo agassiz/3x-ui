@@ -10,7 +10,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/config"
+	"github.com/agassiz/3x-ui/v3/internal/config"
 
 	"github.com/gin-gonic/gin"
 )

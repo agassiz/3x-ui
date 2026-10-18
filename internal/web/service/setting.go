@@ -17,18 +17,18 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/config"
-	"github.com/mhsanaei/3x-ui/v3/internal/database"
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/common"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/netproxy"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/random"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/reflect_util"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/totp"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/entity"
-	"github.com/mhsanaei/3x-ui/v3/internal/xray"
-	"github.com/mhsanaei/3x-ui/v3/internal/xray/dnsconf"
+	"github.com/agassiz/3x-ui/v3/internal/config"
+	"github.com/agassiz/3x-ui/v3/internal/database"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/util/common"
+	"github.com/agassiz/3x-ui/v3/internal/util/netproxy"
+	"github.com/agassiz/3x-ui/v3/internal/util/random"
+	"github.com/agassiz/3x-ui/v3/internal/util/reflect_util"
+	"github.com/agassiz/3x-ui/v3/internal/util/totp"
+	"github.com/agassiz/3x-ui/v3/internal/web/entity"
+	"github.com/agassiz/3x-ui/v3/internal/xray"
+	"github.com/agassiz/3x-ui/v3/internal/xray/dnsconf"
 )
 
 //go:embed config.json
@@ -184,8 +184,8 @@ var defaultValueMap = map[string]string{
 	"subClashEnable":              "false",
 	"subClashPath":                "/clash/",
 	"subClashURI":                 "",
-	"subClashEnableRouting":       "false",
-	"subClashRules":               "",
+	"subClashEnableRouting":       "true",
+	"subClashRules":               "https://raw.githubusercontent.com/agassiz/3x-ui/main/deploy/clash/acl4ssr-routing.yaml",
 	"subJsonMux":                  "",
 	"subJsonRules":                "",
 	"subJsonRoutingRules":         "",

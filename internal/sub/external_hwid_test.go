@@ -6,8 +6,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/dbtest"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
+	"github.com/agassiz/3x-ui/v3/internal/database/dbtest"
+	"github.com/agassiz/3x-ui/v3/internal/web/service"
 )
 
 // #6559: the Master panel must send a stable X-HWID when fetching external

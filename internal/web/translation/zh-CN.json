@@ -120,7 +120,6 @@
     "outbounds": "出站",
     "apiDocs": "API 文档",
     "donate": "捐赠",
-    "sponsors": "赞助商",
     "hosts": "主机",
     "docs": "文档",
     "openMenu": "打开菜单",
@@ -842,6 +841,10 @@
       "addClient": "添加客户端",
       "qrCode": "二维码",
       "clientInfo": "客户端信息",
+      "clashSubscription": "Clash 订阅",
+      "clashSubscriptionDisabled": "Clash 订阅已禁用，请在面板设置 → 订阅中启用 Clash。",
+      "clashSubscriptionMissingId": "此客户端没有订阅 ID。",
+      "clashSubscriptionInvalidUrl": "Clash 订阅地址缺失或无效，请检查面板设置 → 订阅。",
       "editClient": "编辑客户端",
       "client": "客户端",
       "enabled": "已启用",
@@ -2426,15 +2429,6 @@
         "badTag": "无效的标签",
         "badVlessRoute": "请输入 0 到 65535 之间的单个数字"
       }
-    },
-    "sponsors": {
-      "title": "赞助商",
-      "intro": "支持 3X-UI 开发的公司。赞助链接将在新标签页中打开。",
-      "become": "成为赞助商",
-      "tag": "赞助",
-      "visit": "访问",
-      "yourBrand": "您的品牌展示位",
-      "yourBrandText": "让每天打开 3X-UI 的数千名服务器管理员看到您的公司。"
     }
   },
   "tgbot": {

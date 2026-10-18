@@ -8,9 +8,9 @@ import (
 	"sync"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/common"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/util/common"
 
 	"github.com/mymmrac/telego"
 )

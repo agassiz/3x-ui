@@ -9,8 +9,8 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database"
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/database"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
 )
 
 // inboundOpsProbe records every handler and user operation the panel sends the

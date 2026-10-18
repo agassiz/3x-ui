@@ -120,7 +120,6 @@
     "outbounds": "Outbound",
     "apiDocs": "Dokumentasi API",
     "donate": "Donasi",
-    "sponsors": "Sponsor",
     "hosts": "Host",
     "docs": "Dokumentasi",
     "openMenu": "Buka menu",
@@ -842,6 +841,10 @@
       "addClient": "Tambah klien",
       "qrCode": "Kode QR",
       "clientInfo": "Informasi Klien",
+      "clashSubscription": "Langganan Clash",
+      "clashSubscriptionDisabled": "Langganan Clash dinonaktifkan. Aktifkan Clash di Pengaturan Panel → Langganan.",
+      "clashSubscriptionMissingId": "Klien ini tidak memiliki ID langganan.",
+      "clashSubscriptionInvalidUrl": "URL langganan Clash tidak ada atau tidak valid. Periksa Pengaturan Panel → Langganan.",
       "editClient": "Ubah klien",
       "client": "Klien",
       "enabled": "Aktif",
@@ -2426,15 +2429,6 @@
         "badTag": "Tag tidak valid",
         "badVlessRoute": "Masukkan satu angka antara 0 dan 65535"
       }
-    },
-    "sponsors": {
-      "title": "Sponsor",
-      "intro": "Perusahaan yang mendukung pengembangan 3X-UI. Tautan sponsor dibuka di tab baru.",
-      "become": "Jadi sponsor",
-      "tag": "Sponsor",
-      "visit": "Kunjungi",
-      "yourBrand": "Merek Anda di sini",
-      "yourBrandText": "Tampilkan perusahaan Anda kepada ribuan admin server yang membuka 3X-UI setiap hari."
     }
   },
   "tgbot": {

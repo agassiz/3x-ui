@@ -2,6 +2,7 @@ import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Popover, Space, Tag, Tooltip } from 'antd';
 import {
+  CloudOutlined,
   DeleteOutlined,
   EditOutlined,
   InfoCircleOutlined,
@@ -17,6 +18,7 @@ const ICON_BUTTON_STYLE = { fontSize: 16 } as const;
 interface ClientRowActionsProps {
   email: string;
   onShowQr: (email: string) => void;
+  onShowClash: (email: string) => void;
   onShowInfo: (email: string) => void;
   onResetTraffic: (email: string) => void;
   onEdit: (email: string) => void;
@@ -31,6 +33,7 @@ interface ClientRowActionsProps {
 export const ClientRowActions = memo(function ClientRowActions({
   email,
   onShowQr,
+  onShowClash,
   onShowInfo,
   onResetTraffic,
   onEdit,
@@ -47,6 +50,16 @@ export const ClientRowActions = memo(function ClientRowActions({
           icon={<QrcodeOutlined />}
           aria-label={t('pages.clients.qrCode')}
           onClick={() => onShowQr(email)}
+        />
+      </Tooltip>
+      <Tooltip title={t('pages.clients.clashSubscription')}>
+        <Button
+          size="small"
+          type="text"
+          style={ICON_BUTTON_STYLE}
+          icon={<CloudOutlined />}
+          aria-label={t('pages.clients.clashSubscription')}
+          onClick={() => onShowClash(email)}
         />
       </Tooltip>
       <Tooltip title={t('pages.clients.clientInfo')}>

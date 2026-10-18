@@ -5,13 +5,12 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/entity"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/middleware"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/service/panel"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/service/tgbot"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/session"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/web/middleware"
+	"github.com/agassiz/3x-ui/v3/internal/web/service"
+	"github.com/agassiz/3x-ui/v3/internal/web/service/panel"
+	"github.com/agassiz/3x-ui/v3/internal/web/service/tgbot"
+	"github.com/agassiz/3x-ui/v3/internal/web/session"
 
 	"github.com/gin-gonic/gin"
 )
@@ -44,34 +43,10 @@ func NewIndexController(g *gin.RouterGroup) *IndexController {
 func (a *IndexController) initRouter(g *gin.RouterGroup) {
 	g.GET("/", a.index)
 	g.GET("/csrf-token", a.csrfToken)
-	g.GET("/sponsors", a.sponsors)
-	g.GET("/sponsors/logo/:name", a.sponsorLogo)
 
 	g.POST("/login", middleware.CSRFMiddleware(), a.login)
 	g.POST("/logout", middleware.CSRFMiddleware(), a.logout)
 	g.POST("/getTwoFactorEnable", middleware.CSRFMiddleware(), a.getTwoFactorEnable)
-}
-
-// sponsors is public so the login page can render its slot; failures stay silent.
-func (a *IndexController) sponsors(c *gin.Context) {
-	list, err := a.panelService.GetSponsors()
-	if err != nil {
-		logger.Debug("sponsors fetch failed:", err)
-		c.JSON(http.StatusOK, entity.Msg{Success: false})
-		return
-	}
-	jsonObj(c, list, nil)
-}
-
-func (a *IndexController) sponsorLogo(c *gin.Context) {
-	data, contentType, err := a.panelService.GetSponsorLogo(c.Param("name"))
-	if err != nil {
-		logger.Debug("sponsor logo failed:", err)
-		c.Status(http.StatusNotFound)
-		return
-	}
-	c.Header("Cache-Control", "public, max-age=3600")
-	c.Data(http.StatusOK, contentType, data)
 }
 
 // index handles the root route, redirecting logged-in users to the panel or showing the login page.

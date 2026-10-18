@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"maps"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/json_util"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/util/json_util"
 )
 
 // HotDiff describes the gRPC API operations needed to bring a running Xray

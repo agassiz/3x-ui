@@ -120,7 +120,6 @@
     "outbounds": "アウトバウンド",
     "apiDocs": "API ドキュメント",
     "donate": "寄付",
-    "sponsors": "スポンサー",
     "hosts": "ホスト",
     "docs": "ドキュメント",
     "openMenu": "メニューを開く",
@@ -842,6 +841,10 @@
       "addClient": "クライアントを追加",
       "qrCode": "QR コード",
       "clientInfo": "クライアント情報",
+      "clashSubscription": "Clash サブスクリプション",
+      "clashSubscriptionDisabled": "Clash サブスクリプションは無効です。パネル設定 → サブスクリプションで Clash を有効にしてください。",
+      "clashSubscriptionMissingId": "このクライアントにはサブスクリプション ID がありません。",
+      "clashSubscriptionInvalidUrl": "Clash サブスクリプション URL が未設定または無効です。パネル設定 → サブスクリプションを確認してください。",
       "editClient": "クライアントを編集",
       "client": "クライアント",
       "enabled": "有効",
@@ -2426,15 +2429,6 @@
         "badTag": "無効なタグ",
         "badVlessRoute": "0〜65535 の単一の数値を入力してください"
       }
-    },
-    "sponsors": {
-      "title": "スポンサー",
-      "intro": "3X-UI の開発を支援している企業です。スポンサーリンクは新しいタブで開きます。",
-      "become": "スポンサーになる",
-      "tag": "スポンサー",
-      "visit": "訪問",
-      "yourBrand": "ここにあなたのブランドを",
-      "yourBrandText": "毎日 3X-UI を開く何千人ものサーバー管理者に御社をアピールできます。"
     }
   },
   "tgbot": {

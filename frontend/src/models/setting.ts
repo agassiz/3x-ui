@@ -72,8 +72,9 @@ export class AllSetting {
   subURI = '';
   subJsonURI = '';
   subClashURI = '';
-  subClashEnableRouting = false;
-  subClashRules = '';
+  subClashEnableRouting = true;
+  subClashRules =
+    'https://raw.githubusercontent.com/agassiz/3x-ui/main/deploy/clash/acl4ssr-routing.yaml';
   subJsonMux = '';
   subJsonRules = '';
   subJsonRoutingRules = '';

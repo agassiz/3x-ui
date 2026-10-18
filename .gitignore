@@ -9,6 +9,9 @@
 
 # Ignore log files
 *.log
+db/
+data/
+cert/
 
 # Ignore temporary files
 tmp/
@@ -25,6 +28,7 @@ node_modules/
 # Ignore compiled binaries
 main
 3x-ui
+build/
 
 # Ignore OS specific files
 .DS_Store

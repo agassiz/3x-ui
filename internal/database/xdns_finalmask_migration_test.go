@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
 )
 
 // legacyXdnsFinalmask is the 26.9.30 object shape the previous seeder left in panel DBs;

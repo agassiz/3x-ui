@@ -6,8 +6,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/amneziawg"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/wireguard"
+	"github.com/agassiz/3x-ui/v3/internal/amneziawg"
+	"github.com/agassiz/3x-ui/v3/internal/util/wireguard"
 )
 
 // egressPortBound reports whether the egress server's Port accepts TCP.

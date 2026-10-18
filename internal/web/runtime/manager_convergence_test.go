@@ -3,7 +3,7 @@ package runtime
 import (
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
 )
 
 func TestManagerRemoteForRefreshesChangedCredential(t *testing.T) {

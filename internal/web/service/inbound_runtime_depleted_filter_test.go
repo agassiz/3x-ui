@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/amneziawg"
-	"github.com/mhsanaei/3x-ui/v3/internal/database"
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
-	"github.com/mhsanaei/3x-ui/v3/internal/xray"
+	"github.com/agassiz/3x-ui/v3/internal/amneziawg"
+	"github.com/agassiz/3x-ui/v3/internal/database"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/xray"
 )
 
 // seedDepletedOnSibling attaches clients d and h to inbounds a and b with d's

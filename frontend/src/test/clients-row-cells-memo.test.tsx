@@ -92,6 +92,7 @@ describe('clients table row cells', () => {
 
   it('keeps the row actions wired to the right client across re-renders', async () => {
     const onShowQr = vi.fn();
+    const onShowClash = vi.fn();
     const onEdit = vi.fn();
     const noop = vi.fn();
     let bump: () => void = () => {};
@@ -104,6 +105,7 @@ describe('clients table row cells', () => {
             <ClientRowActions
               email="alice@x"
               onShowQr={onShowQr}
+              onShowClash={onShowClash}
               onShowInfo={noop}
               onResetTraffic={noop}
               onEdit={onEdit}
@@ -120,13 +122,16 @@ describe('clients table row cells', () => {
 
     // Queried by position rather than label: the suite loads the real en-US
     // bundle, so the aria-labels are translated strings, not keys. Order is
-    // QR, info, reset traffic, edit, delete.
+    // QR, Clash, info, reset traffic, edit, delete.
     const buttons = screen.getAllByRole('button');
-    expect(buttons).toHaveLength(5);
+    // fork: the Clash subscription button makes six row actions.
+    expect(buttons).toHaveLength(6);
     await userEvent.click(buttons[0]);
-    await userEvent.click(buttons[3]);
+    await userEvent.click(buttons[1]);
+    await userEvent.click(buttons[4]);
 
     expect(onShowQr).toHaveBeenCalledExactlyOnceWith('alice@x');
+    expect(onShowClash).toHaveBeenCalledExactlyOnceWith('alice@x');
     expect(onEdit).toHaveBeenCalledExactlyOnceWith('alice@x');
   });
 });

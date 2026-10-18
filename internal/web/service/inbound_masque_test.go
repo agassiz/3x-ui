@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
 )
 
 const masqueTestStream = `{"network":"masque","security":"tls","masqueSettings":{"path":"/.well-known/masque/ip/*/*/"},

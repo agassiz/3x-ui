@@ -120,7 +120,6 @@
     "outbounds": "出站",
     "apiDocs": "API 文件",
     "donate": "捐贈",
-    "sponsors": "贊助商",
     "hosts": "主機",
     "docs": "文件",
     "openMenu": "開啟選單",
@@ -842,6 +841,10 @@
       "addClient": "新增客戶端",
       "qrCode": "QR 碼",
       "clientInfo": "客戶端資訊",
+      "clashSubscription": "Clash 訂閱",
+      "clashSubscriptionDisabled": "Clash 訂閱已停用，請在面板設定 → 訂閱中啟用 Clash。",
+      "clashSubscriptionMissingId": "此用戶端沒有訂閱 ID。",
+      "clashSubscriptionInvalidUrl": "Clash 訂閱網址缺失或無效，請檢查面板設定 → 訂閱。",
       "editClient": "編輯客戶端",
       "client": "客戶端",
       "enabled": "已啟用",
@@ -2426,15 +2429,6 @@
         "badTag": "無效的標籤",
         "badVlessRoute": "請輸入 0 到 65535 之間的單一數字"
       }
-    },
-    "sponsors": {
-      "title": "贊助商",
-      "intro": "支持 3X-UI 開發的公司。贊助連結將在新分頁中開啟。",
-      "become": "成為贊助商",
-      "tag": "贊助",
-      "visit": "造訪",
-      "yourBrand": "您的品牌展示位",
-      "yourBrandText": "讓每天打開 3X-UI 的數千名伺服器管理員看到您的公司。"
     }
   },
   "tgbot": {

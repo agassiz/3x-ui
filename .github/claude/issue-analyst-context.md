@@ -16,7 +16,7 @@ question it already answers.
 
 3x-ui is an open-source web control panel for managing Xray-core servers.
 
-- Backend: Go 1.27, module `github.com/mhsanaei/3x-ui/v3`, Gin and GORM.
+- Backend: Go 1.27, module `github.com/agassiz/3x-ui/v3`, Gin and GORM.
 - It runs Xray-core as a managed child process (`internal/xray/process.go`) and
   imports `github.com/xtls/xray-core` for config types and the gRPC
   stats/handler/router API. The release the panel BUNDLES is pinned in
@@ -133,7 +133,7 @@ configs for the same inbound.
 - **amnezia-vpn/amneziawg-go** — the obfuscation parameters the panel generates
   (`Jc`/`Jmin`/`Jmax`, `S1`-`S4`, `H1`-`H4`, `I1`-`I5`). Its `device/uapi.go` is the
   symbol that decides which keys are accepted.
-- **mhsanaei/mtg-multi** — the MTProto sidecar whose TOML (`[secrets]`,
+- **agassiz/mtg-multi** — the MTProto sidecar whose TOML (`[secrets]`,
   `[secret-ad-tags]`, `[secret-limits]`) and management API
   (`PUT /secrets`, `POST /secrets/{name}/reset-quota`) `internal/mtproto/`
   writes and calls.
@@ -169,7 +169,7 @@ test that cannot fail is invisible to CI. `make verify` is the local gate.
 
 ## Support facts reporters get wrong
 
-- Linux install: `bash <(curl -Ls https://raw.githubusercontent.com/mhsanaei/3x-ui/master/install.sh)`
+- Linux install: `bash <(curl -Ls https://raw.githubusercontent.com/agassiz/3x-ui/main/install.sh)`
 - Install generates a RANDOM username, password and web base path — never
   admin/admin. The `x-ui` menu on the server shows or resets them.
 - The installer service environment file is DISTRO-DEPENDENT:
@@ -182,7 +182,7 @@ test that cannot fail is invisible to CI. `make verify` is the local gate.
 - SQLite to PostgreSQL: `x-ui migrate-db --dsn "postgres://..."`, then set
   `XUI_DB_TYPE`/`XUI_DB_DSN` in that file and `systemctl restart x-ui`. The
   source SQLite file is left in place.
-- Docker image `ghcr.io/mhsanaei/3x-ui`; PostgreSQL profile
+- Docker image `ghcr.io/agassiz/3x-ui`; PostgreSQL profile
   `docker compose --profile postgres up -d`. Fail2ban IP-limit enforcement needs
   `NET_ADMIN` + `NET_RAW` (compose grants them; a bare `docker run` must add
   `--cap-add=NET_ADMIN --cap-add=NET_RAW`).

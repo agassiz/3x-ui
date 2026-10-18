@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/xray"
+	"github.com/agassiz/3x-ui/v3/internal/xray"
 )
 
 // Real-core tests: the bugs they pin live in how RoutingService rebuilds

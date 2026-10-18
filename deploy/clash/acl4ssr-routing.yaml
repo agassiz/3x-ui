@@ -1,0 +1,267 @@
+# ACL4SSR 风格的 Clash 分流模板：分组复刻自 sub.datapipe.top，规则集由客户端从 ACL4SSR 下载。
+# 来源、用法（远程 URL 或粘贴）和同步方法见同目录 README.md；需要 Mihomo（Clash Meta）内核客户端。
+port: 7890
+socks-port: 7891
+allow-lan: true
+mode: rule
+log-level: info
+external-controller: 127.0.0.1:9090
+
+proxy-groups:
+  - name: 🔰 节点选择
+    type: select
+    proxies:
+      - ♻️ 自动选择
+      - 🎯 全球直连
+    include-all-proxies: true
+  - name: ♻️ 自动选择
+    type: url-test
+    url: http://www.gstatic.com/generate_204
+    interval: 300
+    include-all-proxies: true
+  - name: 🤖GPT
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+    include-all-proxies: true
+  - name: 🤖Gemini
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+    include-all-proxies: true
+  - name: 🎥 NETFLIX
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+      - 🎯 全球直连
+    include-all-proxies: true
+  - name: ⛔️ 广告拦截
+    type: select
+    proxies:
+      - 🛑 全球拦截
+      - 🎯 全球直连
+      - 🔰 节点选择
+  - name: 🚫 运营劫持
+    type: select
+    proxies:
+      - 🛑 全球拦截
+      - 🎯 全球直连
+      - 🔰 节点选择
+  - name: 🌍 国外媒体
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - ♻️ 自动选择
+      - 🎯 全球直连
+    include-all-proxies: true
+  - name: 🌏 国内媒体
+    type: select
+    proxies:
+      - 🎯 全球直连
+      - 🔰 节点选择
+  - name: Ⓜ️ 微软服务
+    type: select
+    proxies:
+      - 🎯 全球直连
+      - 🔰 节点选择
+    include-all-proxies: true
+  - name: 📲 电报信息
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - 🎯 全球直连
+    include-all-proxies: true
+  - name: 🍎 苹果服务
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - 🎯 全球直连
+      - ♻️ 自动选择
+    include-all-proxies: true
+  - name: 🎯 全球直连
+    type: select
+    proxies:
+      - DIRECT
+  - name: 🛑 全球拦截
+    type: select
+    proxies:
+      - REJECT
+      - DIRECT
+  - name: 🐟 漏网之鱼
+    type: select
+    proxies:
+      - 🔰 节点选择
+      - 🎯 全球直连
+      - ♻️ 自动选择
+    include-all-proxies: true
+
+rule-providers:
+  LocalAreaNetwork:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/LocalAreaNetwork.list
+    path: ./ruleset/acl4ssr/LocalAreaNetwork.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  OpenAi:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/OpenAi.list
+    path: ./ruleset/acl4ssr/OpenAi.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Gemini:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Gemini.list
+    path: ./ruleset/acl4ssr/Gemini.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Microsoft:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Microsoft.list
+    path: ./ruleset/acl4ssr/Microsoft.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  UnBan:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/UnBan.list
+    path: ./ruleset/acl4ssr/UnBan.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  GoogleFCM:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/GoogleFCM.list
+    path: ./ruleset/acl4ssr/GoogleFCM.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  GoogleCN:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/GoogleCN.list
+    path: ./ruleset/acl4ssr/GoogleCN.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  BanAD:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanAD.list
+    path: ./ruleset/acl4ssr/BanAD.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  BanProgramAD:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/BanProgramAD.list
+    path: ./ruleset/acl4ssr/BanProgramAD.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Netflix:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Ruleset/Netflix.list
+    path: ./ruleset/acl4ssr/Netflix.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  ProxyMedia:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyMedia.list
+    path: ./ruleset/acl4ssr/ProxyMedia.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  ChinaMedia:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaMedia.list
+    path: ./ruleset/acl4ssr/ChinaMedia.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Telegram:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Telegram.list
+    path: ./ruleset/acl4ssr/Telegram.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  ProxyGFWlist:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ProxyGFWlist.list
+    path: ./ruleset/acl4ssr/ProxyGFWlist.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Apple:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Apple.list
+    path: ./ruleset/acl4ssr/Apple.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  ChinaDomain:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaDomain.list
+    path: ./ruleset/acl4ssr/ChinaDomain.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  ChinaCompanyIp:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/ChinaCompanyIp.list
+    path: ./ruleset/acl4ssr/ChinaCompanyIp.list
+    interval: 86400
+    proxy: 🔰 节点选择
+  Download:
+    type: http
+    behavior: classical
+    format: text
+    url: https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/Download.list
+    path: ./ruleset/acl4ssr/Download.list
+    interval: 86400
+    proxy: 🔰 节点选择
+
+rules:
+  - RULE-SET,LocalAreaNetwork,🎯 全球直连
+  - RULE-SET,OpenAi,🤖GPT
+  - RULE-SET,Gemini,🤖Gemini
+  - RULE-SET,Microsoft,Ⓜ️ 微软服务
+  - RULE-SET,UnBan,🎯 全球直连
+  - RULE-SET,GoogleFCM,🎯 全球直连
+  - RULE-SET,GoogleCN,🎯 全球直连
+  - RULE-SET,BanAD,🛑 全球拦截
+  - RULE-SET,BanProgramAD,🛑 全球拦截
+  - RULE-SET,Netflix,🎥 NETFLIX
+  - RULE-SET,ProxyMedia,🌍 国外媒体
+  - RULE-SET,ChinaMedia,🌏 国内媒体
+  - RULE-SET,Telegram,📲 电报信息
+  - RULE-SET,ProxyGFWlist,🔰 节点选择
+  - RULE-SET,Apple,🍎 苹果服务
+  - RULE-SET,ChinaDomain,🎯 全球直连
+  - RULE-SET,ChinaCompanyIp,🎯 全球直连
+  - RULE-SET,Download,🎯 全球直连
+  - GEOIP,CN,🎯 全球直连
+  - MATCH,🐟 漏网之鱼

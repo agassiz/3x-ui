@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/util/wireguard"
+	"github.com/agassiz/3x-ui/v3/internal/util/wireguard"
 )
 
 // OutboundPeer is one remote AmneziaWG server: its public key, the routes

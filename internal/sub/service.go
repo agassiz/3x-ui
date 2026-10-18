@@ -18,17 +18,17 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/goccy/go-json"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/amneziawg"
-	"github.com/mhsanaei/3x-ui/v3/internal/database"
-	"github.com/mhsanaei/3x-ui/v3/internal/database/model"
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
-	"github.com/mhsanaei/3x-ui/v3/internal/tuic"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/common"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/maskcompat"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/random"
-	wgutil "github.com/mhsanaei/3x-ui/v3/internal/util/wireguard"
-	"github.com/mhsanaei/3x-ui/v3/internal/web/service"
-	"github.com/mhsanaei/3x-ui/v3/internal/xray"
+	"github.com/agassiz/3x-ui/v3/internal/amneziawg"
+	"github.com/agassiz/3x-ui/v3/internal/database"
+	"github.com/agassiz/3x-ui/v3/internal/database/model"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/tuic"
+	"github.com/agassiz/3x-ui/v3/internal/util/common"
+	"github.com/agassiz/3x-ui/v3/internal/util/maskcompat"
+	"github.com/agassiz/3x-ui/v3/internal/util/random"
+	wgutil "github.com/agassiz/3x-ui/v3/internal/util/wireguard"
+	"github.com/agassiz/3x-ui/v3/internal/web/service"
+	"github.com/agassiz/3x-ui/v3/internal/xray"
 )
 
 var salamanderWarningSeen sync.Map

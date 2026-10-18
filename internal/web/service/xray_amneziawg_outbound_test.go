@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/amneziawgnet"
-	"github.com/mhsanaei/3x-ui/v3/internal/util/json_util"
-	wgutil "github.com/mhsanaei/3x-ui/v3/internal/util/wireguard"
-	"github.com/mhsanaei/3x-ui/v3/internal/xray"
+	"github.com/agassiz/3x-ui/v3/internal/amneziawgnet"
+	"github.com/agassiz/3x-ui/v3/internal/util/json_util"
+	wgutil "github.com/agassiz/3x-ui/v3/internal/util/wireguard"
+	"github.com/agassiz/3x-ui/v3/internal/xray"
 )
 
 func amneziawgnetEgressPortForTest() int { return amneziawgnet.EgressPort() }

@@ -1,4 +1,4 @@
-// Package mtproto manages mtg-multi (github.com/mhsanaei/mtg-multi) sidecar
+// Package mtproto manages mtg-multi (github.com/agassiz/mtg-multi) sidecar
 // processes that serve MTProto FakeTLS proxies. Xray-core has no mtproto
 // protocol, so mtproto inbounds are run as standalone mtg processes — one
 // process per inbound, each serving every active client's secret through the
@@ -20,8 +20,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/mhsanaei/3x-ui/v3/internal/config"
-	"github.com/mhsanaei/3x-ui/v3/internal/logger"
+	"github.com/agassiz/3x-ui/v3/internal/config"
+	"github.com/agassiz/3x-ui/v3/internal/logger"
 )
 
 // GetBinaryName returns the mtg binary filename for the current OS and arch,

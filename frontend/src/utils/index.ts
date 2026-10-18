@@ -228,7 +228,7 @@ export class RandomUtil {
   }
 
   static randomShortIds(): string {
-    const lengths = [2, 4, 6, 8, 10, 12, 14, 16].sort(() => Math.random() - 0.5);
+    const lengths = [6, 8, 10, 12, 14, 16].sort(() => Math.random() - 0.5);
     return lengths.map((len) => this.randomSeq(len, { type: 'hex' })).join(',');
   }
 

@@ -40,6 +40,7 @@ import {
   LinkOutlined,
   MoreOutlined,
   PlusOutlined,
+  CloudOutlined,
   QrcodeOutlined,
   RestOutlined,
   RetweetOutlined,
@@ -83,6 +84,7 @@ import {
 const ClientFormModal = lazy(() => import('./ClientFormModal'));
 const ClientInfoModal = lazy(() => import('./ClientInfoModal'));
 const ClientQrModal = lazy(() => import('./ClientQrModal'));
+const ClashQrModal = lazy(() => import('./ClashQrModal'));
 const ClientBulkAddModal = lazy(() => import('./ClientBulkAddModal'));
 const ClientBulkAdjustModal = lazy(() => import('./ClientBulkAdjustModal'));
 const FilterDrawer = lazy(() => import('./FilterDrawer'));
@@ -405,6 +407,7 @@ export default function ClientsPage() {
   const [infoClient, setInfoClient] = useState<ClientRecord | null>(null);
   const [qrOpen, setQrOpen] = useState(false);
   const [qrClient, setQrClient] = useState<ClientRecord | null>(null);
+  const [clashEmail, setClashEmail] = useState('');
   const [viewingTunnelAllowedIPs, setViewingTunnelAllowedIPs] = useState<Record<number, string>>(
     {},
   );
@@ -775,6 +778,8 @@ export default function ClientsPage() {
     [hydrate],
   );
 
+  const onShowClash = useCallback((email: string) => setClashEmail(email), []);
+
   const [refreshing, setRefreshing] = useState(false);
   const onRefreshClick = useCallback(async () => {
     setRefreshing(true);
@@ -1065,6 +1070,7 @@ export default function ClientsPage() {
           <ClientRowActions
             email={record.email}
             onShowQr={onShowQr}
+            onShowClash={onShowClash}
             onShowInfo={onShowInfo}
             onResetTraffic={onResetTraffic}
             onEdit={onEdit}
@@ -1816,6 +1822,16 @@ export default function ClientsPage() {
                                               onClick: () => onShowQr(row.email),
                                             },
                                             {
+                                              key: 'clash',
+                                              label: (
+                                                <>
+                                                  <CloudOutlined />{' '}
+                                                  {t('pages.clients.clashSubscription')}
+                                                </>
+                                              ),
+                                              onClick: () => onShowClash(row.email),
+                                            },
+                                            {
                                               key: 'reset',
                                               label: (
                                                 <>
@@ -1915,6 +1931,15 @@ export default function ClientsPage() {
             subSettings={subSettings}
             hosts={hosts}
             onOpenChange={setInfoOpen}
+          />
+        </LazyMount>
+        <LazyMount when={!!clashEmail}>
+          <ClashQrModal
+            open={!!clashEmail}
+            email={clashEmail}
+            subId={clients.find((client) => client.email === clashEmail)?.subId}
+            subSettings={subSettings}
+            onOpenChange={(open) => !open && setClashEmail('')}
           />
         </LazyMount>
         <LazyMount when={qrOpen}>
